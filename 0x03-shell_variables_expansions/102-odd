@@ -1,2 +1,2 @@
 #!/bin/bash
-awk 'NR % 2 == 1"
+grep -n "" | grep '[0-9]*[02468]' | cut -d ':' -f 2
