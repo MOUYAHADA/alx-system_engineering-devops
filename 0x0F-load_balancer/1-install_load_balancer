@@ -11,8 +11,8 @@ frontend webridv.tech
 
 backend http_back
     balance roundrobin
-    server web-01 52.205.104.225:80 check
-    server web-02 54.208.233.216:80 check
+    server web-01 554.197.45.152:80 check
+    server web-02 54.162.100.252:80 check
 
 ' | sudo tee /etc/haproxy/haproxy.cfg
 
