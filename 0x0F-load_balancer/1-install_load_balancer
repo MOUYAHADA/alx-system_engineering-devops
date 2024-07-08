@@ -5,7 +5,7 @@ sudo apt-get -y install haproxy
 
 
 echo '
-frontend webridv.tech
+frontend devmoha.tech
     bind *:80
     default_backend http_back
 
