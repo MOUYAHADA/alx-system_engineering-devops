@@ -1,19 +1,30 @@
 #!/usr/bin/env bash
 
+hostnamectl set-hostname 520166-lb-01
+
 sudo apt-get -y update
 sudo apt-get -y install haproxy
 
+cat > /etc/haproxy/haproxy.cfg <<EOF
+global
+    daemon
 
-echo '
+defaults
+    mode http
+    timeout connect 5000
+    timeout client  50000
+    timeout server  50000
+
 frontend devmoha.tech
     bind *:80
+
     default_backend http_back
 
 backend http_back
+    mode http
     balance roundrobin
-    server web-01 554.197.45.152:80 check
-    server web-02 54.162.100.252:80 check
-
-' | sudo tee /etc/haproxy/haproxy.cfg
+    server 520166-web-01 554.197.45.152:80 check
+    server 520166-web-02 54.162.100.252:80 check
+EOF
 
 sudo service haproxy restart
