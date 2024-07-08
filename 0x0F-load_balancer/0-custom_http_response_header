@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# configures a new Ubuntu machine
+
+sudo apt-get -y update
+sudo apt-get -y install nginx
+sudo ufw allow 'Nginx HTTP'
+
+HOST_NAME=$(hostname)
+HEADER="\\\n\tadd_header X-Served-By $HOST_NAME;\n"
+FIND=$(grep "X-Server-by" /etc/nginx/sites-available/default)
+if [[ -z $FIND ]]; then
+    sudo sed -i "23i $HEADER" /etc/nginx/sites-available/default
+fi
+
+echo "Hello World!" | sudo tee /var/www/html/index.html >> /dev/null
+
+FIND=$(grep "redirect_me" /etc/nginx/sites-available/default)
+STRING="\\\n\tlocation /redirect_me {\n\t\t return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}\n"
+if [[ -z $FIND ]]; then
+    sudo sed -i "42i $STRING" /etc/nginx/sites-available/default
+fi
+
+FIND=$(grep "error_page 404" /etc/nginx/sites-available/default)
+ERROR="\\\n\terror_page 404 /custom_404.html;\n"
+if [[ -z $FIND ]]; then
+    echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html >> /dev/null
+    sudo sed -i "40i $ERROR" /etc/nginx/sites-available/default
+fi
+
+sudo service nginx restart
