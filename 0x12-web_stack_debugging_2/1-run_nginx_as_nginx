@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# script to run nginx as nginx user
+
+file='/etc/nginx/sites-available/default'
+pkill -f apache2
+
+chmod 777 /etc/nginx/nginx.conf
+
+sed -i 's/80/8080/g' $file
+
+sudo -u nginx service nginx restart
